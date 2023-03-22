@@ -9,14 +9,16 @@ export default function Board() {
   return (
     <div className="board">
       {currentProject.board.map((column) => (
-        <div className="board-column">
+        <div className="board-column" key={column.name}>
           <div className="board-title">
-            <div className="board-title-icon todo"></div>
-            <h4 className="">To Do</h4>
+            <div
+              className={"board-title-icon " + column.name.toLocaleLowerCase()}
+            ></div>
+            <h4 className="">{column.name}</h4>
           </div>
 
           {column.tickets.map((ticket) => (
-            <Ticket />
+            <Ticket ticket={ticket} key={ticket.id} />
           ))}
         </div>
       ))}

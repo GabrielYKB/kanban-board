@@ -33,7 +33,7 @@ export const projectsData: Project[] = [
         name: "Doing",
         tickets: [
           {
-            title: "First ticket",
+            title: "third ticket",
             description: "issa ticket",
             id: uuid4(),
             tasks: ["task1", "task2"],
@@ -44,7 +44,7 @@ export const projectsData: Project[] = [
         name: "Done",
         tickets: [
           {
-            title: "First ticket",
+            title: "second ticket",
             description: "issa ticket",
             id: uuid4(),
             tasks: ["task1", "task2"],

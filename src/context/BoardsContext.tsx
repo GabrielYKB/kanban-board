@@ -1,6 +1,7 @@
 import React, { Children, createContext, useContext, useState } from "react";
 import { v4 as uuid4 } from "uuid";
 import { Project, projectsData } from "./projects-data";
+import { useLocalStorage } from "usehooks-ts";
 
 interface Context {
   projects: Project[];
@@ -25,7 +26,10 @@ type Props = {
 };
 
 export default function BoardsContextProvider({ children }: Props) {
-  const [projects, setProjects] = useState<Project[]>(projectsData);
+  const [projects, setProjects] = useLocalStorage<Project[]>(
+    "project-data",
+    projectsData
+  );
   const [selectedIndex, setSelectedIndex] = useState(0);
   const currentProject = projects[selectedIndex];
 
@@ -35,7 +39,11 @@ export default function BoardsContextProvider({ children }: Props) {
       {
         name,
         id: uuid4(),
-        board: [],
+        board: [
+          { name: "Todo", tickets: [] },
+          { name: "Doing", tickets: [] },
+          { name: "Done", tickets: [] },
+        ],
       },
     ]);
     changeBoard(projects.length);
