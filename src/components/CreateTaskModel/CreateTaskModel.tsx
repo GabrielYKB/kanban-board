@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import "./CreateTaskModel.scss";
 import { X } from "react-feather";
+import { useBoardContext } from "../../context/BoardsContext";
 
 type props = {
     toggleShowCreateTask: () => void;
 };
 
 export default function CreateTaskModel({ toggleShowCreateTask }: props) {
+    const { createTicket } = useBoardContext();
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [status, setStatus] = useState(0);
     const [subtasks, setSubtasks] = useState([""]);
 
     return (
@@ -26,15 +31,43 @@ export default function CreateTaskModel({ toggleShowCreateTask }: props) {
                     type="text"
                     id="title"
                     placeholder="This is a title..."
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                 />
 
                 <label htmlFor="description">Description</label>
-                <textarea id="title" placeholder="This is a description..." />
+                <textarea
+                    id="description"
+                    placeholder="This is a description..."
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                />
+
+                <label htmlFor="status">Status</label>
+                <select
+                    name="status"
+                    id="status"
+                    value={status}
+                    onChange={(e) => setStatus(parseInt(e.target.value))}
+                >
+                    <option value={0}>To do</option>
+                    <option value={1}>Doing</option>
+                    <option value={2}>Done</option>
+                </select>
 
                 <label>Subtasks</label>
                 {subtasks.map((task, index) => (
                     <div className="subtask-container">
-                        <input type="text" placeholder="This is a subtask..." />
+                        <input
+                            type="text"
+                            placeholder="This is a subtask..."
+                            onChange={(e) => {
+                                subtasks[index] = e.target.value;
+                                setSubtasks([...subtasks]);
+                            }}
+                            value={task}
+                        />
+
                         <X
                             onClick={() => {
                                 subtasks.splice(index, 1);
@@ -49,7 +82,15 @@ export default function CreateTaskModel({ toggleShowCreateTask }: props) {
                 >
                     Add Subtask
                 </button>
-                <button className="btn">Create Ticket</button>
+                <button
+                    className="btn"
+                    onClick={() => {
+                        createTicket(title, description, subtasks, status);
+                        toggleShowCreateTask();
+                    }}
+                >
+                    Create Ticket
+                </button>
             </div>
         </div>
     );
