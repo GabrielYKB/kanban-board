@@ -1,19 +1,20 @@
-import React, { useState } from "react";
-import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
-import { Ticket as TicketType } from "../../context/projects-data";
-import "./Ticket.scss";
+import React, { useState } from 'react'
+import { Ticket as TicketType } from '../../context/projects-data'
+import './Ticket.scss'
+import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 
 type Props = {
-    ticket: TicketType;
-    provided: DraggableProvided;
-    snapshot: DraggableStateSnapshot;
-};
+    ticket: TicketType
+    provided: DraggableProvided
+    snapshot: DraggableStateSnapshot
+}
 
 export default function Ticket({ ticket, provided, snapshot }: Props) {
-    const [showSubtasks, setShowSubtasks] = useState(false);
+    const [showSubtasks, setShowSubtasks] = useState(false)
+
     return (
         <div
-            className="ticket"
+            className='ticket'
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
@@ -23,7 +24,7 @@ export default function Ticket({ ticket, provided, snapshot }: Props) {
         >
             <h3>{ticket.title}</h3>
             <p>{ticket.description}</p>
-            <p>{ticket.tasks.length + " Subtasks"}</p>
+            <p>{ticket.tasks.length} subtasks</p>
             {showSubtasks && (
                 <ul>
                     {ticket.tasks.map((task) => (
@@ -32,5 +33,5 @@ export default function Ticket({ ticket, provided, snapshot }: Props) {
                 </ul>
             )}
         </div>
-    );
+    )
 }

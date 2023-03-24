@@ -1,19 +1,19 @@
-import React, { Children, createContext, useContext, useState } from "react";
-import { v4 as uuid4 } from "uuid";
-import { Project, projectsData } from "./projects-data";
-import { useLocalStorage } from "usehooks-ts";
+import React, { createContext, useContext, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
+import { Project, projectsData } from './projects-data'
+import { useLocalStorage } from 'usehooks-ts'
 
 interface Context {
-    projects: Project[];
-    createProject: (name: string) => void;
-    changeBoard: (index: number) => void;
+    projects: Project[]
+    createProject: (name: string) => void
+    changeBoard: (index: number) => void
     createTicket: (
         title: string,
         description: string,
         subtasks: string[],
         index: number
-    ) => void;
-    currentProject: Project;
+    ) => void
+    currentProject: Project
 }
 
 const BoardsContext = createContext<Context>({
@@ -22,42 +22,42 @@ const BoardsContext = createContext<Context>({
     changeBoard: () => {},
     createTicket: () => {},
     currentProject: {} as Project,
-});
+})
 
 export function useBoardContext() {
-    return useContext(BoardsContext);
+    return useContext(BoardsContext)
 }
 
 type Props = {
-    children: React.ReactNode;
-};
+    children: React.ReactNode
+}
 
 export default function BoardsContextProvider({ children }: Props) {
     const [projects, setProjects] = useLocalStorage<Project[]>(
-        "project-data",
+        'project-data',
         projectsData
-    );
-    const [selectedIndex, setSelectedIndex] = useState(0);
-    const currentProject = projects[selectedIndex];
+    )
+    const [selectedIndex, setSelectedIndex] = useState(0)
+    const currentProject = projects[selectedIndex]
 
     function createProject(name: string) {
         setProjects([
             ...projects,
             {
                 name,
-                id: uuid4(),
+                id: uuidv4(),
                 board: [
-                    { name: "Todo", tickets: [] },
-                    { name: "Doing", tickets: [] },
-                    { name: "Done", tickets: [] },
+                    { name: 'Todo', tickets: [] },
+                    { name: 'Doing', tickets: [] },
+                    { name: 'Done', tickets: [] },
                 ],
             },
-        ]);
-        changeBoard(projects.length);
+        ])
+        changeBoard(projects.length)
     }
 
     function changeBoard(index: number) {
-        setSelectedIndex(index);
+        setSelectedIndex(index)
     }
 
     function createTicket(
@@ -70,10 +70,10 @@ export default function BoardsContextProvider({ children }: Props) {
             title,
             description,
             tasks: subtasks,
-            id: uuid4(),
-        });
+            id: uuidv4(),
+        })
 
-        setProjects([...projects]);
+        setProjects([...projects])
     }
 
     return (
@@ -82,11 +82,11 @@ export default function BoardsContextProvider({ children }: Props) {
                 projects,
                 createProject,
                 currentProject,
-                createTicket,
                 changeBoard,
+                createTicket,
             }}
         >
             {children}
         </BoardsContext.Provider>
-    );
+    )
 }
